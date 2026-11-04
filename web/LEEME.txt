@@ -1,0 +1,28 @@
+RUMBO A CUSCO — VUELOS Y BASE DE DATOS LOCAL
+
+Extrae la carpeta completa y abre index.html.
+HTML: index.html. CSS: css/styles.css. JavaScript: js/app.js. Base de datos: js/db.js.
+
+La sección Vuelos permite agregar, editar y eliminar tramos. El botón Cargar vuelos de la imagen agrega ida y vuelta como referencia, no como compra confirmada. Incluye las tasas de USD 56.98 por separado, sin repartirlas ni duplicarlas. Los importes USD no se suman automáticamente al presupuesto PEN.
+
+Todos los datos se guardan automáticamente en IndexedDB del navegador, con respaldo en localStorage y migración de datos anteriores si abres la página en el mismo origen. No requiere servidor ni cuenta. No crea un archivo .db visible.
+
+Usa siempre el mismo navegador, perfil y ubicación. Los datos no se comparten entre dispositivos. Borrar los datos del navegador o usar modo privado puede eliminarlos. Exporta una copia JSON desde Notas para respaldar o trasladar todo, incluidos los vuelos. Las imágenes y fuentes externas requieren internet.
+
+ITINERARIO: usa Editar junto a cada actividad para cambiar nombre, día, hora, lugar y tipo. Guardar actualiza la misma actividad sin duplicarla y muestra el día elegido.
+
+HORARIOS: cada actividad tiene hora de inicio y fin. Se calcula su duración y la suma de duraciones por día (sin descontar solapamientos). Una hora de fin anterior a la de inicio indica el día siguiente. Las actividades antiguas conservan su hora y puedes añadirles una hora de fin con Editar.
+
+GOOGLE MAPS: al crear o editar una actividad puedes pegar un enlace opcional. El botón Abrir en Google Maps aparece solo si la actividad tiene un enlace válido. Se guarda junto a los demás datos.
+
+TRENES: nueva sección para agregar, editar y eliminar horarios de ida/vuelta. Inca Rail y PeruRail son alternativas de ida; Tren Local tiene enlace a horarios de vuelta. El botón de capturas carga 10 opciones Inca Rail (dos rutas), del 15/12/2026, con precios referenciales por persona. No son reservas confirmadas. Los datos de PeruRail y la vuelta se añaden manualmente desde los enlaces oficiales. Incluye logos locales (Inca Rail tomado visualmente de tu captura). Los trenes se guardan y se exportan con el viaje.
+
+VISTA DE TRENES: primero elige una empresa; sus horarios aparecen al pulsar la tarjeta. Inca Rail carga las referencias una sola vez al seleccionarlo. Filtra por origen y despliega detalles para editar. Sitio oficial abre la página de la empresa.
+
+NUEVAS REFERENCIAS: PeruRail incluye 8 opciones visibles de la captura del 15/12/2026. Tren Local incluye opciones de vuelta con fecha por elegir; horas contrastadas con https://www.trenlocal.pe/wp-content/uploads/2026/08/TL-HORARIOS-RESIDENTES.pdf . El tren 22 tiene dos destinos alternativos del mismo servicio, no son dos trenes distintos. La imagen original puede tener diferencias con el PDF. Los precios de Tren Local no se inventan: figuran por consultar. Referencias cargadas una vez al elegir su empresa, sin duplicar los datos existentes.
+
+TREN LOCAL POR SERVICIO: cinco botones (50, 72, 74, 22, 76). Los horarios se muestran solo al seleccionar un tren. El 22 conserva dos destinos del mismo servicio.
+
+HOTELES: opciones agrupadas por entrada/salida, huéspedes, precio total opcional y estado. Airbnb inicial del 16 al 18 de diciembre de 2026, 2 noches; el enlace original incluía salida el 19. Nombre y precio por confirmar. Al cambiar las fechas se actualizan los parámetros del enlace Airbnb. Los alojamientos se guardan localmente y se incluyen en exportación/importación JSON.
+
+RUTAS ELEGIDAS: PeruRail Expedition 73P de ida, Wanchaq 10:30 a Machu Picchu Pueblo 14:25. Transbordo en Pachar y parada en Ollantaytambo según información oficial del servicio 73; horas intermedias por confirmar. Tren Local 74 de vuelta a las 14:55: se muestra la tabla completa de la imagen hasta Pachar 16:55, con llegada a Ollantaytambo 16:31. Fecha de vuelta por definir. La empresa descartada se retira de las opciones y datos de tren al abrir o importar.
