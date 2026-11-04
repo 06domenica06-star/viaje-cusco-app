@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function autorizado() {
+   return request.auth != null
+    && exists(/databases/$(database)/documents/allowedDevices/$(request.auth.uid))
+    && get(/databases/$(database)/documents/allowedDevices/$(request.auth.uid)).data.enabled == true;
+  }
+  match /allowedDevices/{uid} {
+   allow get: if request.auth != null && request.auth.uid == uid;
+   allow list, create, update, delete: if false;
+  }
+  match /trips/cusco-2026 {
+   allow get: if autorizado();
+   allow create, update: if autorizado()
+    && request.resource.data.keys().hasOnly(['state', 'updatedAt', 'updatedBy', 'schemaVersion'])
+    && request.resource.data.state is map
+    && request.resource.data.schemaVersion == 1
+    && request.resource.data.updatedBy == request.auth.uid
+    && request.resource.data.updatedAt == request.time;
+   allow list, delete: if false;
+  }
+  match /{document=**} { allow read, write: if false; }
+ }
+}
