@@ -10,10 +10,10 @@
 <link rel="apple-touch-icon" href="assets/icono.png">
 </head>
 <body>
-<aside>
+<aside aria-label="Menú del viaje">
 <a class="brand" href="#" aria-label="Inicio"><img class="brand-icon" src="assets/icono.png" alt="Logo del viaje">
 </a>
-<small>TU ESPACIO DE VIAJE</small>
+<small>TU ESPACIO DE VIAJE</small><button id="nav-toggle" aria-expanded="false" aria-controls="nav"><span>☰</span> <span id="nav-current">Itinerario</span> <span class="menu-caption">Secciones ▾</span></button>
 <nav id="nav">
 </nav>
 <div class="aside-bottom">PERÚ, NOS VEMOS PRONTO<p>Un viaje para recordar.<br>Un lugar para organizarlo.</p>✦</div>
@@ -68,7 +68,7 @@
 </section>
 <section class="cloud-panel" aria-label="Sincronización compartida"><div class="cloud-heading"><strong>☁ Viaje compartido</strong><span id="cloud-status" role="status">Preparando conexión…</span><button id="cloud-retry" hidden>Reintentar conexión</button></div><details><summary>Autorizar este dispositivo</summary><p>Para compartir los datos, autoriza este código en Firebase. No necesitas correo ni contraseña.</p><label>Código de este dispositivo <input id="device-code" readonly value="Conectando…"></label><button id="cloud-copy">Copiar código</button><button id="cloud-backup">Descargar copia anterior</button><p class="sub">Conserva los datos de la app al actualizarla para mantener tu autorización.</p></details></section><section id="content">
 </section>
-<footer>VIAJE CUSCO · v1.0 <span>Rumbo · Cusco 15—19</span>
+<footer>HECHO PARA DISFRUTAR EL CAMINO <span>Rumbo · Cusco 15—19</span>
 </footer>
 </main>
 <dialog id="modal">
