@@ -33,15 +33,17 @@ El alias se mantiene como `viaje-cusco`. Conserva el archivo de firma y su contr
 
 No hace falta `google-services.json`: esta app usa la configuración Firebase de la web integrada. Las reglas privadas ya publicadas siguen vigentes. Las operaciones quedan prohibidas a dispositivos no autorizados.
 
-## Actualizar a 1.1
+## Actualizar la app
 
-Modifica los archivos de `web/` y súbelos a GitHub. Ejecuta otra compilación con nombre **1.1**, código **2** (después **1.2**, código **3**, etc.). Instala encima de la versión anterior, sin desinstalar. Conserva aplicación `pe.domenica.viajecusco` y los dos secretos de firma. Los datos de Firebase no se borran al compilar ni al actualizar. Los cambios de contenido web necesitan una nueva APK con este diseño; no hay descarga automática de código.
+Sube los archivos actualizados de `web/` y de `app/` a GitHub; el aviso diario incluye código Android nativo. Ejecuta otra compilación con una versión nueva (por ejemplo, **1.2**, código **3**; cada código debe ser mayor que el anterior). Instala encima de la versión anterior, sin desinstalar. Conserva aplicación `pe.domenica.viajecusco` y los dos secretos de firma. Los datos de Firebase no se borran al compilar ni al actualizar. Los cambios de contenido web necesitan una nueva APK con este diseño; no hay descarga automática de código.
 
 ## Datos y respaldo
 
 Si tienes datos locales en una web anterior, expórtalos antes de cambiar de versión. Al conectar un segundo dispositivo, adopta los datos compartidos y conserva respaldo local previo. JSON e ICS se exportan con el selector de archivos Android; importar JSON permite elegir un archivo del teléfono. Los enlaces de reservas y mapas se abren en el navegador.
 
-Las ediciones de distintos registros se combinan. Si ambos editan el mismo campo, gana la última escritura. Las notificaciones de recordatorios requieren la app abierta; no se ha añadido programación nativa en segundo plano.
+Itinerario, hoteles, trenes, vuelos, gastos, reservas/tours, equipaje, recordatorios y notas permiten editar sus datos. Las ediciones de distintos registros se combinan. Si ambos editan el mismo campo, gana la última escritura.
+
+El aviso diario de cuenta regresiva se configura en **Editar viaje**: elige fecha, hora de Perú y si quieres recibirlo. Además, cada actividad del itinerario genera un aviso a su hora de inicio, usando el día del viaje, el nombre y el lugar. En **Avisos**, pulsa **Activar notificaciones** y acepta el permiso en cada celular. Para mayor puntualidad, permite también **Alarmas y recordatorios** cuando Android abra sus ajustes. Sin ese permiso, Android puede retrasar los avisos durante el ahorro de batería. Los avisos de actividades se programan en cada celular cuando la app recibe los datos sincronizados.
 
 ## Validación
 
