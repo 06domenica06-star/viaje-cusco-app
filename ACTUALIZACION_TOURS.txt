@@ -1,0 +1,13 @@
+ACTUALIZACIÓN: TOURS Y MENÚ SUPERIOR
+
+En celular, toca el menú superior para abrir Itinerario, Tours, Hoteles, Trenes, Vuelos y las demás secciones. En computadora se mantiene el menú lateral.
+
+Tours permite agregar, editar y eliminar opciones con fecha, horarios, duración, agencia, precio por persona, viajeros, estado, enlaces y notas. Los tours se guardan localmente y se comparten mediante la misma conexión Firebase. El pago se registra aparte en Gastos para evitar duplicarlo.
+
+WEB: reemplaza los archivos de web/ en la misma ubicación desde la que abrías el viaje, conservando el navegador y su almacenamiento. Exporta antes una copia JSON desde Notas. No cambies las reglas de Firebase.
+
+APK EXISTENTE: reemplaza el contenido de web/ en tu repositorio Android con los archivos de esta carpeta web/. Conserva app/, scripts/, .github/, la firma y la configuración Android del repositorio. Compila con un version_code mayor al último usado (por ejemplo, 2 si el anterior era 1), y versión 1.1. Instala encima de la app anterior, sin desinstalar, en ambos celulares.
+
+El ZIP contiene el código web; los datos del viaje se conservan en el navegador/celular o en Firebase y no están incluidos en el ZIP.
+
+Validado: sintaxis JS y flujo de agregar/editar/eliminar tours, cálculo de duración y total, importación de copias anteriores y nuevas y recepción de datos compartidos mediante pruebas con DOM simulado. No se ejecutó una prueba visual en un navegador ni una compilación APK en esta actualización.

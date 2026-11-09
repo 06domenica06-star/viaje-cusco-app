@@ -1,0 +1,13 @@
+*.jks
+*.keystore
+*.p12
+*BASE64*.txt
+*PASSWORD*.txt
+signing/
+.gradle/
+**/build/
+local.properties
+.idea/
+*.iml
+
+app/src/main/assets/web/

@@ -1,0 +1,30 @@
+VIAJE CUSCO — CONEXIÓN COMPARTIDA v1.0
+
+ESTADO: web integrada con tu Firebase. Falta publicar reglas, autorizar dispositivos y comprobar la sincronización real. Este ZIP todavía no es una APK.
+
+1. FIREBASE: entra a Firestore > Reglas. Copia TODO firestore.rules y pulsa Publicar. Estas reglas no hacen pública la base. Authentication > Anónimo debe estar habilitado.
+
+2. WEB DE PRUEBA: abre una terminal dentro de web y ejecuta:
+   py -m http.server 8080 --bind 127.0.0.1
+   (en Linux/Mac: python3 -m http.server 8080 --bind 127.0.0.1)
+   Entra en http://localhost:8080 . Conserva siempre la misma dirección y navegador. No abras index.html con doble clic para probar Firebase.
+
+3. En Viaje compartido > Autorizar este dispositivo copia el código. Si no sale, comprueba internet y Anónimo habilitado. En Firebase > Firestore > Datos, pulsa Iniciar colección:
+   ID de colección: allowedDevices
+   ID del documento: PEGA EL CÓDIGO DEL DISPOSITIVO
+   Campo: enabled
+   Tipo: boolean
+   Valor: true
+   Guarda y pulsa Reintentar conexión en la web.
+
+4. Primera conexión: si el viaje compartido no existe, se sube el viaje de este dispositivo. Si ya existe, se usa el viaje compartido. Se conserva una copia de los datos locales anteriores en el botón Descargar copia anterior. Si tu web anterior tiene datos reales, usa Exportar viaje y guarda el JSON ANTES de conectar; después puedes Importarlo para transferirlo al viaje compartido.
+
+5. Para dos celulares, cada instalación final de la APK tendrá su propio código. Crea SOLO los dos documentos de autorización correspondientes. Un navegador de prueba tiene un código distinto; elimina su documento al terminar. Un tercero no podrá acceder si su código no está autorizado. No compartas contraseñas ni archivos de cuentas de servicio. La configuración web de Firebase identifica el proyecto; las reglas controlan el acceso.
+
+6. Los cambios se envían con internet y aparecen en la otra instalación conectada. Sin internet, los cambios se guardan localmente y quedan pendientes (tras la primera conexión autorizada). Se combinan cambios de registros diferentes; si ambos modifican el mismo campo, gana la última escritura. No deben editar antes de completar su primera conexión. Al reinstalar o borrar datos, se pierde la identidad y hay que autorizar el código nuevo.
+
+7. ACTUALIZACIONES: conservaremos nombre de paquete y clave de firma al generar APK 1.0, 1.1, etc. Debe instalarse la nueva versión encima de la anterior, sin desinstalar. Eso mantiene identidad y datos. Este paquete contiene la web; todavía falta generar, firmar y probar la APK en Android.
+
+8. AVISOS: los recordatorios web requieren la app abierta. No son notificaciones Android en segundo plano.
+
+PRUEBA FINAL: con dos dispositivos autorizados, agrega un gasto en el primero y verifica que aparece en el segundo; edítalo desde el segundo; prueba desconectar y volver a conectar internet. Las pruebas locales del código no sustituyen esa prueba real contra tu proyecto.
