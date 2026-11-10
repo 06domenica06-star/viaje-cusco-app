@@ -34,3 +34,6 @@
  main{margin-left:0;padding:0 14px 24px}
  header{height:58px}
 }
+
+/* Tours: a dedicated area for planning and managing experiences. */
+.tour-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.tour-card{display:flex;flex-direction:column;min-height:235px}.tour-top,.tour-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}.tour-date,.tour-meta{font-size:11px;color:var(--muted)}.tour-card h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;margin:19px 0 4px}.tour-card p{font-size:12px}.tour-bottom{margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}.tour-bottom>strong{font-size:14px}.tour-bottom>div{display:flex;align-items:center;gap:10px}.tour-bottom a{font-size:11px;color:var(--green)}.tour-bottom .delete{margin-left:0}@media(max-width:760px){.tour-grid{grid-template-columns:1fr}.tour-card h2{font-size:22px}}
