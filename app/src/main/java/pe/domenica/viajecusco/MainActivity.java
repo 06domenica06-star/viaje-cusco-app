@@ -12,7 +12,19 @@ import android.os.Bundle;
 import android.webkit.*;
 import android.graphics.Color;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Gravity;
 import android.view.WindowInsets;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 import androidx.webkit.WebViewAssetLoader;
 import java.io.OutputStream;
@@ -20,13 +32,19 @@ import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends Activity {
  private WebView web;
+ private FrameLayout root;
+ private View splashView;
+ private long splashStartedAt;
  private ValueCallback<Uri[]> fileCallback;
  private String pendingText;
  private static final int IMPORT_FILE=40, EXPORT_FILE=41, NOTIFICATION_PERMISSION=42;
  private static final String HOST="appassets.androidplatform.net";
  @Override public void onCreate(Bundle state) {
   super.onCreate(state);
-  web=new WebView(this);setContentView(web);web.setBackgroundColor(Color.rgb(247,248,243));
+  splashStartedAt=System.currentTimeMillis();
+  root=new FrameLayout(this);
+  web=new WebView(this);root.addView(web,new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));web.setBackgroundColor(Color.rgb(247,248,243));
+  splashView=createSplash();root.addView(splashView,new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));setContentView(root);
   web.setOnApplyWindowInsetsListener((v,insets)->{
    if(android.os.Build.VERSION.SDK_INT>=30){android.graphics.Insets bars=insets.getInsets(WindowInsets.Type.systemBars()|WindowInsets.Type.displayCutout()|WindowInsets.Type.ime());v.setPadding(bars.left,bars.top,bars.right,bars.bottom);}
    else v.setPadding(insets.getSystemWindowInsetLeft(),insets.getSystemWindowInsetTop(),insets.getSystemWindowInsetRight(),insets.getSystemWindowInsetBottom());
@@ -38,6 +56,7 @@ public class MainActivity extends Activity {
   WebViewAssetLoader loader=new WebViewAssetLoader.Builder().addPathHandler("/assets/",new WebViewAssetLoader.AssetsPathHandler(this)).build();
   web.setWebViewClient(new WebViewClient(){
    @Override public WebResourceResponse shouldInterceptRequest(WebView view,WebResourceRequest request){return loader.shouldInterceptRequest(request.getUrl());}
+   @Override public void onPageFinished(WebView view,String url){super.onPageFinished(view,url);hideSplashWhenReady();}
    @Override public boolean shouldOverrideUrlLoading(WebView view,WebResourceRequest request){Uri u=request.getUrl();if(isLocal(u))return false;openExternal(u);return true;}
   });
   web.setWebChromeClient(new WebChromeClient(){
@@ -58,6 +77,18 @@ public class MainActivity extends Activity {
   EventNotifications.schedule(this);
   web.loadUrl("https://"+HOST+"/assets/web/index.html");
  }
+ private View createSplash(){
+  LinearLayout box=new LinearLayout(this);box.setOrientation(LinearLayout.VERTICAL);box.setGravity(Gravity.CENTER);box.setBackgroundColor(Color.rgb(247,248,243));
+  ImageView logo=new ImageView(this);logo.setImageResource(R.drawable.logo);logo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+  LinearLayout.LayoutParams logoParams=new LinearLayout.LayoutParams(dp(144),dp(144));logoParams.bottomMargin=dp(20);box.addView(logo,logoParams);
+  RotateAnimation spin=new RotateAnimation(0,360,Animation.RELATIVE_TO_SELF,.5f,Animation.RELATIVE_TO_SELF,.5f);spin.setDuration(2200);spin.setRepeatCount(Animation.INFINITE);spin.setInterpolator(new LinearInterpolator());logo.startAnimation(spin);
+  TextView title=new TextView(this);title.setText("Rumbo a Cusco");title.setTextColor(Color.rgb(37,75,64));title.setTextSize(21);title.setGravity(Gravity.CENTER);title.setTypeface(null,android.graphics.Typeface.BOLD);box.addView(title);
+  TextView subtitle=new TextView(this);subtitle.setText("Preparando tu viaje…");subtitle.setTextColor(Color.rgb(126,130,122));subtitle.setTextSize(13);subtitle.setGravity(Gravity.CENTER);LinearLayout.LayoutParams subParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);subParams.topMargin=dp(8);box.addView(subtitle,subParams);
+  ProgressBar progress=new ProgressBar(this);progress.setIndeterminate(true);progress.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(Color.rgb(37,75,64)));LinearLayout.LayoutParams progressParams=new LinearLayout.LayoutParams(dp(30),dp(30));progressParams.topMargin=dp(19);box.addView(progress,progressParams);
+  return box;
+ }
+ private int dp(float value){return (int)(value*getResources().getDisplayMetrics().density+.5f);}
+ private void hideSplashWhenReady(){if(splashView==null)return;long wait=Math.max(0,650-(System.currentTimeMillis()-splashStartedAt));new Handler(Looper.getMainLooper()).postDelayed(()->{if(splashView==null)return;View old=splashView;splashView=null;old.animate().alpha(0f).setDuration(240).withEndAction(()->root.removeView(old)).start();},wait);}
  private boolean isLocal(Uri u){return "https".equals(u.getScheme())&&HOST.equals(u.getHost());}
  private void openExternal(Uri u){if(!"https".equals(u.getScheme())&&!"http".equals(u.getScheme()))return;try{startActivity(new Intent(Intent.ACTION_VIEW,u));}catch(Exception e){Toast.makeText(this,"No se pudo abrir el enlace",Toast.LENGTH_SHORT).show();}}
  private class ExportBridge {

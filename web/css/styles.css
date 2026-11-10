@@ -20,3 +20,17 @@
 .cloud-panel{border:1px solid #d6e1d0;background:#eef4e8;border-radius:13px;padding:16px 19px;margin:0 0 24px}.cloud-heading{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.cloud-heading strong{font-size:13px}.cloud-heading span{font-size:11px;color:#53664e}.cloud-panel details{margin-top:11px;font-size:12px}.cloud-panel summary{cursor:pointer}.cloud-panel input{display:block;width:100%;max-width:420px;padding:11px;border:1px solid #ccd7c5;border-radius:7px;background:white;color:#253b32;margin:8px 0}.cloud-panel p{font-size:12px}.cloud-panel button{font-size:11px;margin:4px 5px 4px 0}
 .check-setting{display:flex;align-items:center;gap:10px;padding:10px 0;color:var(--ink,#173a34)}.check-setting input{width:18px;height:18px;accent-color:#245449}
 .hero-countdown{display:inline-flex;align-items:center;margin-top:14px;padding:9px 13px;border-radius:999px;background:#254b40;color:#fff;font-size:12px;font-weight:700;letter-spacing:.2px;box-shadow:0 3px 10px #253b321a}
+/* Navigation optimized for phones: logo and swipeable sections stay at the top. */
+@media(max-width:760px){
+ aside{position:sticky;top:0;bottom:auto;width:100%;height:auto;min-height:92px;z-index:20;padding:7px 10px 8px;background:#fffffff2;border:0;border-bottom:1px solid var(--line);display:block;backdrop-filter:blur(12px)}
+ .brand{display:flex;align-items:center;gap:8px;height:34px;margin:0 7px 5px;color:var(--green);font-size:16px;font-weight:700;letter-spacing:-.3px}
+ .brand-icon{width:30px;height:30px}
+ aside>small,.aside-bottom{display:none}
+ nav{display:flex;justify-content:flex-start;gap:5px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:1px 2px 3px}
+ nav::-webkit-scrollbar{display:none}
+ nav button{display:flex;flex:0 0 auto;align-items:center;gap:6px;min-width:max-content;padding:8px 10px;border:1px solid transparent;border-radius:999px;background:transparent;text-align:center;white-space:nowrap;font-size:10px}
+ nav button span{display:inline-block;width:auto;margin:0;font-size:14px}
+ nav button.active{background:#eaf0e8;border-color:#dfe7dc}
+ main{margin-left:0;padding:0 14px 24px}
+ header{height:58px}
+}
