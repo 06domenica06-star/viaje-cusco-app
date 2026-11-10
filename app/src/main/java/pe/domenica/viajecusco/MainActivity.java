@@ -80,11 +80,9 @@ public class MainActivity extends Activity {
  private View createSplash(){
   LinearLayout box=new LinearLayout(this);box.setOrientation(LinearLayout.VERTICAL);box.setGravity(Gravity.CENTER);box.setBackgroundColor(Color.rgb(247,248,243));
   ImageView logo=new ImageView(this);logo.setImageResource(R.drawable.logo);logo.setScaleType(ImageView.ScaleType.FIT_CENTER);
-  LinearLayout.LayoutParams logoParams=new LinearLayout.LayoutParams(dp(144),dp(144));logoParams.bottomMargin=dp(20);box.addView(logo,logoParams);
+  LinearLayout.LayoutParams logoParams=new LinearLayout.LayoutParams(dp(184),dp(184));logoParams.bottomMargin=dp(24);box.addView(logo,logoParams);
   RotateAnimation spin=new RotateAnimation(0,360,Animation.RELATIVE_TO_SELF,.5f,Animation.RELATIVE_TO_SELF,.5f);spin.setDuration(2200);spin.setRepeatCount(Animation.INFINITE);spin.setInterpolator(new LinearInterpolator());logo.startAnimation(spin);
-  TextView title=new TextView(this);title.setText("Rumbo a Cusco");title.setTextColor(Color.rgb(37,75,64));title.setTextSize(21);title.setGravity(Gravity.CENTER);title.setTypeface(null,android.graphics.Typeface.BOLD);box.addView(title);
-  TextView subtitle=new TextView(this);subtitle.setText("Preparando tu viaje…");subtitle.setTextColor(Color.rgb(126,130,122));subtitle.setTextSize(13);subtitle.setGravity(Gravity.CENTER);LinearLayout.LayoutParams subParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);subParams.topMargin=dp(8);box.addView(subtitle,subParams);
-  ProgressBar progress=new ProgressBar(this);progress.setIndeterminate(true);progress.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(Color.rgb(37,75,64)));LinearLayout.LayoutParams progressParams=new LinearLayout.LayoutParams(dp(30),dp(30));progressParams.topMargin=dp(19);box.addView(progress,progressParams);
+  ProgressBar progress=new ProgressBar(this);progress.setIndeterminate(true);progress.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(Color.rgb(37,75,64)));LinearLayout.LayoutParams progressParams=new LinearLayout.LayoutParams(dp(28),dp(28));box.addView(progress,progressParams);
   return box;
  }
  private int dp(float value){return (int)(value*getResources().getDisplayMetrics().density+.5f);}
