@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#254b40">
 <title>Rumbo a Cusco</title>
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="icon" type="image/png" href="assets/icono.png">
 <link rel="apple-touch-icon" href="assets/icono.png">
@@ -25,11 +26,11 @@
 </header>
 <section class="hero">
 <div class="hero-copy">
-<span class="pill">PERÚ · 5 DÍAS DE AVENTURA</span>
+<span class="pill">PERÚ · 4 DÍAS DE AVENTURA</span>
 <h1>Nos vamos<br>a <em>Cusco.</em>
 </h1>
 <p>Calles con historia. Montañas infinitas.<br>Y un viaje que empieza aquí.</p>
-<div class="hero-footer">↗ Del 15 al 19 <small id="monthlabel">· Mes por definir</small>
+<div class="hero-footer">↗ Del 16 al 19 <small id="monthlabel">· Mes por definir</small>
 </div>
 <div class="hero-countdown" id="daysleft" aria-live="polite">Preparando cuenta regresiva…</div>
 </div>
@@ -43,9 +44,9 @@
 <section class="stats">
 <article>
 <span>◷ DURACIÓN</span>
-<strong>5 <small>días</small>
+<strong>4 <small>días</small>
 </strong>
-<p>15 → 19 · tu escapada andina</p>
+<p>16 → 19 · tu escapada andina</p>
 </article>
 <article>
 <span>◈ PRESUPUESTO DISPONIBLE</span>
@@ -69,7 +70,7 @@
 </section>
 <section class="cloud-panel" aria-label="Sincronización compartida"><div class="cloud-heading"><strong>☁ Viaje compartido</strong><span id="cloud-status" role="status">Preparando conexión…</span><button id="cloud-retry" hidden>Reintentar conexión</button></div><details><summary>Autorizar este dispositivo</summary><p>Para compartir los datos, autoriza este código en Firebase. No necesitas correo ni contraseña.</p><label>Código de este dispositivo <input id="device-code" readonly value="Conectando…"></label><button id="cloud-copy">Copiar código</button><button id="cloud-backup">Descargar copia anterior</button><p class="sub">Conserva los datos de la app al actualizarla para mantener tu autorización.</p></details></section><section id="content">
 </section>
-<footer>VIAJE CUSCO · v1.0 <span>Rumbo · Cusco 15—19</span>
+<footer>VIAJE CUSCO · v1.0 <span>Rumbo · Cusco 16—19</span>
 </footer>
 </main>
 <dialog id="modal">
@@ -94,6 +95,7 @@
 <script src="js/cloud.js" defer></script>
 <script src="js/app.js" defer>
 </script>
+<script>if("serviceWorker" in navigator && location.protocol.startsWith("http")){navigator.serviceWorker.register("./sw.js").catch(()=>{})}</script>
 </body>
 </html>
 

@@ -26,6 +26,9 @@ import android.view.animation.RotateAnimation;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
+import android.print.PrintManager;
+import android.print.PrintAttributes;
+import android.util.Base64;
 import androidx.webkit.WebViewAssetLoader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -37,6 +40,7 @@ public class MainActivity extends Activity {
  private long splashStartedAt;
  private ValueCallback<Uri[]> fileCallback;
  private String pendingText;
+ private byte[] pendingBytes;
  private static final int IMPORT_FILE=40, EXPORT_FILE=41, NOTIFICATION_PERMISSION=42;
  private static final String HOST="appassets.androidplatform.net";
  @Override public void onCreate(Bundle state) {
@@ -62,7 +66,7 @@ public class MainActivity extends Activity {
   web.setWebChromeClient(new WebChromeClient(){
    @Override public boolean onShowFileChooser(WebView view,ValueCallback<Uri[]> cb,FileChooserParams params){
     if(fileCallback!=null)fileCallback.onReceiveValue(null);fileCallback=cb;
-    Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType("application/json");
+    Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);String mime="application/json";for(String type:params.getAcceptTypes()){if(type==null||type.trim().isEmpty())continue;for(String candidate:type.split(",")){candidate=candidate.trim();if(candidate.startsWith("image/")||candidate.equals("application/pdf")){mime="*/*";break;}}}intent.setType(mime);
     try{startActivityForResult(intent,IMPORT_FILE);return true;}catch(Exception e){fileCallback=null;cb.onReceiveValue(null);return false;}
    }
    @Override public boolean onCreateWindow(WebView view,boolean dialog,boolean gesture,android.os.Message result){
@@ -92,6 +96,8 @@ public class MainActivity extends Activity {
  private class ExportBridge {
   @JavascriptInterface public void setCountdown(boolean enabled,String date,String time){runOnUiThread(()->{if(!isLocal(Uri.parse(web.getUrl())))return;try{DailyCountdown.save(MainActivity.this,enabled,date,time);}catch(Exception ignored){}});}
   @JavascriptInterface public void setEvents(String json,String month){runOnUiThread(()->{if(!isLocal(Uri.parse(web.getUrl())))return;EventNotifications.update(MainActivity.this,json,month);});}
+  @JavascriptInterface public void saveDataUrl(String dataUrl,String name,String mime){runOnUiThread(()->{if(!isLocal(Uri.parse(web.getUrl())))return;try{int comma=dataUrl.indexOf(',');if(comma<0)throw new IllegalArgumentException();String meta=dataUrl.substring(0,comma),payload=dataUrl.substring(comma+1);pendingBytes=meta.contains(";base64")?Base64.decode(payload,Base64.DEFAULT):payload.getBytes(StandardCharsets.UTF_8);Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);intent.addCategory(Intent.CATEGORY_OPENABLE);intent.setType(mime==null||mime.trim().isEmpty()?"application/octet-stream":mime);intent.putExtra(Intent.EXTRA_TITLE,name);startActivityForResult(intent,EXPORT_FILE);}catch(Exception e){pendingBytes=null;Toast.makeText(MainActivity.this,"No se pudo abrir el selector de archivos",Toast.LENGTH_SHORT).show();}});}
+  @JavascriptInterface public void printPage(){runOnUiThread(()->{if(!isLocal(Uri.parse(web.getUrl())))return;try{PrintManager manager=(PrintManager)getSystemService(PRINT_SERVICE);if(manager!=null)manager.print("Viaje a Cusco",web.createPrintDocumentAdapter("Resumen del día"),new PrintAttributes.Builder().setMediaSize(PrintAttributes.MediaSize.ISO_A4).setResolution(new PrintAttributes.Resolution("cusco","Rumbo Cusco",300,300)).setMinMargins(PrintAttributes.Margins.NO_MARGINS).build());}catch(Exception e){Toast.makeText(MainActivity.this,"No se pudo abrir la opción para guardar como PDF",Toast.LENGTH_LONG).show();}});}
   @JavascriptInterface public void requestNotificationPermission(){runOnUiThread(()->{if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},NOTIFICATION_PERMISSION);else{requestExactAlarmAccess();DailyCountdown.schedule(MainActivity.this);EventNotifications.schedule(MainActivity.this);Toast.makeText(MainActivity.this,"Avisos del viaje activados",Toast.LENGTH_SHORT).show();}});}
   @JavascriptInterface public void saveText(String text,String name,String type){runOnUiThread(()->{
    if(!isLocal(Uri.parse(web.getUrl())))return;
@@ -105,7 +111,7 @@ public class MainActivity extends Activity {
  @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){super.onRequestPermissionsResult(request,permissions,results);if(request==NOTIFICATION_PERMISSION){if(results.length>0&&results[0]==PackageManager.PERMISSION_GRANTED){requestExactAlarmAccess();DailyCountdown.schedule(this);EventNotifications.schedule(this);Toast.makeText(this,"Avisos del viaje activados",Toast.LENGTH_SHORT).show();}else Toast.makeText(this,"Activa las notificaciones en Ajustes para recibir el aviso diario",Toast.LENGTH_LONG).show();}}
  @Override protected void onActivityResult(int request,int result,Intent data){super.onActivityResult(request,result,data);
   if(request==IMPORT_FILE&&fileCallback!=null){fileCallback.onReceiveValue(result==RESULT_OK&&data!=null?new Uri[]{data.getData()}:null);fileCallback=null;}
-  if(request==EXPORT_FILE){if(result==RESULT_OK&&data!=null&&pendingText!=null){try(OutputStream out=getContentResolver().openOutputStream(data.getData())){out.write(pendingText.getBytes(StandardCharsets.UTF_8));Toast.makeText(this,"Archivo guardado",Toast.LENGTH_SHORT).show();}catch(Exception e){Toast.makeText(this,"No se pudo guardar el archivo",Toast.LENGTH_LONG).show();}}pendingText=null;}
+  if(request==EXPORT_FILE){if(result==RESULT_OK&&data!=null&&(pendingText!=null||pendingBytes!=null)){try(OutputStream out=getContentResolver().openOutputStream(data.getData())){out.write(pendingBytes!=null?pendingBytes:pendingText.getBytes(StandardCharsets.UTF_8));Toast.makeText(this,"Archivo guardado",Toast.LENGTH_SHORT).show();}catch(Exception e){Toast.makeText(this,"No se pudo guardar el archivo",Toast.LENGTH_LONG).show();}}pendingText=null;pendingBytes=null;}
  }
  @Override public void onBackPressed(){if(web.canGoBack())web.goBack();else super.onBackPressed();}
  @Override protected void onDestroy(){if(fileCallback!=null)fileCallback.onReceiveValue(null);web.removeJavascriptInterface("NativeFiles");web.destroy();super.onDestroy();}

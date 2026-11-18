@@ -44,7 +44,7 @@ final class EventNotifications {
     String id=String.valueOf(e.opt("id"));String title=e.optString("title","").trim();String time=e.optString("time","");
     if(title.isEmpty()||time.isEmpty())continue;
     int day=e.optInt("day",0);LocalDate date;
-    try{date=LocalDate.of(year,m,day);}catch(Exception invalid){continue;}
+    try{date=e.has("date")?LocalDate.parse(e.optString("date")):LocalDate.of(year,m,day);}catch(Exception invalid){continue;}
     ZonedDateTime when=date.atTime(LocalTime.parse(time)).atZone(LIMA);
     if(!when.isAfter(now))continue;
     PendingIntent pi=alarmIntent(c,id,title,e.optString("place",""),when.toInstant().toEpochMilli());
