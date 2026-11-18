@@ -30,7 +30,7 @@ final class DailyCountdown {
   String[] hm=p.getString("time","10:00").split(":");
   int hour=Integer.parseInt(hm[0]), minute=Integer.parseInt(hm[1]);
   ZonedDateTime now=ZonedDateTime.now(LIMA);
-  LocalDate tripDate=LocalDate.parse(p.getString("date","2026-12-16"));
+  LocalDate tripDate=LocalDate.parse(p.getString("date","2026-12-15"));
   if(now.toLocalDate().isAfter(tripDate)) { cancel(c); return; }
   ZonedDateTime next=now.toLocalDate().atTime(hour,minute).atZone(LIMA);
   if(now.toLocalDate().equals(tripDate)&&!next.isAfter(now)) { cancel(c); return; }
@@ -48,7 +48,7 @@ final class DailyCountdown {
  static void show(Context c) {
   if(Build.VERSION.SDK_INT>=33 && c.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED)return;
   var p=c.getSharedPreferences(PREFS,Context.MODE_PRIVATE);
-  LocalDate start=LocalDate.parse(p.getString("date","2026-12-16"));
+  LocalDate start=LocalDate.parse(p.getString("date","2026-12-15"));
   long days=java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(LIMA),start);
   String text=days>1?"Faltan "+days+" días para tu viaje a Cusco.":days==1?"Mañana empieza tu viaje a Cusco.":days==0?"¡Hoy empieza tu viaje a Cusco!":"Tu viaje a Cusco ya comenzó.";
   NotificationManager nm=(NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
